@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace FriendWebAPI.Controllers
 {
@@ -36,19 +37,30 @@ namespace FriendWebAPI.Controllers
             {
                 return BadRequest("Invalid request body.");
             }
-            // Combine the two friends
-            string combinedFriends = $"{request.friend1}, {request.friend2}";
+
+            // Create a new FriendCombination instance
+            var newCombination = new FriendCombination
+            {
+                Friend1 = request.friend1,
+                Friend2 = request.friend2
+            };
 
             // Get the path to the JSON file
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "friends.json");
 
-            // Read the existing content from the file (if it exists)
-            string existingContent = System.IO.File.Exists(filePath)
-                ? System.IO.File.ReadAllText(filePath)
-                : string.Empty;
+            // Deserialize existing content from the file (if it exists)
+            List<FriendCombination> existingCombinations = new List<FriendCombination>();
+            if (System.IO.File.Exists(filePath))
+            {
+                string existingContent = System.IO.File.ReadAllText(filePath);
+                existingCombinations = JsonSerializer.Deserialize<List<FriendCombination>>(existingContent);
+            }
 
-            // Update the content with the new friend combination
-            string updatedContent = $"{existingContent}{Environment.NewLine}{combinedFriends}";
+            // Add the new friend combination
+            existingCombinations.Add(newCombination);
+
+            // Serialize the updated content back to JSON
+            string updatedContent = JsonSerializer.Serialize(existingCombinations, new JsonSerializerOptions { WriteIndented = true });
 
             // Write the updated content back to the file
             System.IO.File.WriteAllText(filePath, updatedContent);
@@ -56,6 +68,7 @@ namespace FriendWebAPI.Controllers
             // Return a success response
             return Ok("Combined friends appended to the JSON file.");
         }
+
 
     }
 }

@@ -1,3 +1,14 @@
-
-Markku, Joni
-Paavo, Joni
+[
+  {
+    "Friend1": "Ayesha",
+    "Friend2": "Roya"
+  },
+  {
+    "Friend1": "Joni",
+    "Friend2": "Markus"
+  },
+  {
+    "Friend1": "Markku",
+    "Friend2": "Iiro"
+  }
+]

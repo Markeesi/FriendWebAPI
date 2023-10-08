@@ -1,0 +1,1 @@
+2023-10-08 13:55:23.5530|INFO|FriendWebAPI.Controllers.FriendsController|POST CreateFriends - Status Code: 200 OK - Combined friends appended to the JSON file.
